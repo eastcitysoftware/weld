@@ -75,14 +75,14 @@ Attaching functionality to DOM elements is achieved using the custom attribute `
 You can think of these bindings as components. They are reusable, self-contained pieces of functionality that can be attached to any element in the DOM. The binder function is called with the element, any parameters passed to it, and any named targets within the binding scope.
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <!-- a basic binding -->
 <div wd-bind="greet"></div>
 <script>
-    weld.bind('greet', function (el) {
-        weld.el(el, 'Hello world')
-    })
-
-    weld.apply()
+    weld.bind('greet', (el) => {
+        weld.el(el, 'Hello world');
+    });
 </script>
 ```
 
@@ -93,6 +93,8 @@ You can also pass parameters to the binder using the `wd-attr` attribute. This c
 This is useful for passing data from the server to the client, or for configuring the behavior of the binder.
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <!-- passing a string -->
 <div wd-bind="greetValue" wd-attr="pim"></div>
 
@@ -106,17 +108,15 @@ This is useful for passing data from the server to the client, or for configurin
 <div wd-bind="greetComplex" wd-attr='{"name":"pim"}'></div>
 
 <script>
-    weld.bind('greetValue', function (el, attr) {
-        const message = 'Hello ' + attr
-        weld.el(el, message)
-    })
+    weld.bind('greetValue', (el, attr) => {
+        const message = 'Hello ' + attr;
+        weld.el(el, message);
+    });
 
-    weld.bind('greetComplex', function (el, attr) {
-        const message = 'Hello ' + attr.name
-        weld.el(el, message)
-    })
-
-    weld.apply()
+    weld.bind('greetComplex', (el, attr) => {
+        const message = 'Hello ' + attr.name;
+        weld.el(el, message);
+    });
 </script>
 ```
 
@@ -125,6 +125,8 @@ This is useful for passing data from the server to the client, or for configurin
 Declaratively define named targets using the `wd-target` attribute. This gives you keyed access to elements within the binding scope. This is useful when you need to manipulate or identify elements within a binding.
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <!-- designating a named target -->
 <div wd-bind="greetTarget" wd-attr="pim">
     <div wd-target=greeting></div>
@@ -140,20 +142,18 @@ Declaratively define named targets using the `wd-target` attribute. This gives y
 
 <script>
     weld.bind('greetTarget', (el, attr, targets) => {
-        const message = 'Hello ' + attr
+        const message = 'Hello ' + attr;
         targets.greeting ?
             weld.el(targets.greeting, message) :
-            weld.el(el, message)
-    })
+            weld.el(el, message);
+    });
 
     weld.bind('greetMulti', (el, attr, targets) => {
-        const greeting = attr.greeting ? attr.greeting : "Hello"
-        const name = attr.name ? attr.name : "world"
-        weld.el(targets.greeting, greeting)
-        weld.el(targets.name, name)
-    })
-
-    weld.apply()
+        const greeting = attr.greeting ? attr.greeting : "Hello";
+        const name = attr.name ? attr.name : "world";
+        weld.el(targets.greeting, greeting);
+        weld.el(targets.name, name);
+    });
 </script>
 ```
 
@@ -173,7 +173,7 @@ const button = weld.el('button', {
     class: 'myClass',
     textContent: 'Click me',
     onclick: () => alert('Hello world')
-})
+});
 
 button.outerHTML // <button id="myButton" class="myClass">Click me</button>
 button.click() // alerts 'Hello world'
@@ -183,27 +183,31 @@ There is also some shortcuts to make common tasks, like assigning IDs, classes a
 
 ```js
 const button = weld.el('button#myButton.myClass', 'Click me', {
-    onclick: () => alert('Hello world') })
+    onclick: () => alert('Hello world')
+});
 ```
 
 `weld.el()` can also be used to augment existing elements. By passing an element as the first argument, the attributes and content are applied to the element. This is useful when working with named targets.
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <div wd-bind="counter" wd-attr="99">
     <p>You clicked the button <span wd-target="count">0</span> times</p>
     <button wd-target="clicker">Click me</button>
 </div>
 <script>
-    weld.bind('counter', function (el, attr, targets) {
-        let count = attr
-        weld.el(targets.count, count)
-        weld.el(targets.clicker, { onclick: () => {
-            count++
-            weld.el(targets.count, count)
-        }})
-    })
+    weld.bind('counter', (el, attr, targets) => {
+        let count = attr;
+        weld.el(targets.count, count);
 
-    weld.apply()
+        weld.el(targets.clicker, {
+            onclick: () => {
+                count++;
+                weld.el(targets.count, count);
+            }
+        });
+    });
 </script>
 ```
 
@@ -212,15 +216,15 @@ const button = weld.el('button#myButton.myClass', 'Click me', {
 When manipulating element content, you are typically either appending content or replacing it. weld.js provides two functions for this, `weld.dom.append()` and `weld.dom.set()`. Both functions take an element as the first parameter and one or more elements as the second parameter.
 
 ```js
-const container = weld.el('div')
-const button = weld.el('button', 'Click me', { onclick: () => alert('Hello world') })
+const container = weld.el('div');
+const button = weld.el('button', 'Click me', { onclick: () => alert('Hello world') });
 
-weld.dom.set(container, button)
-container.outerHTML // <div><button>Click me</button></div>
+weld.dom.set(container, button);
+container.outerHTML; // <div><button>Click me</button></div>
 
-const para = weld.el('p', 'Hello world')
-weld.dom.append(container, para)
-container.outerHTML // <div><button>Click me</button><p>Hello world</p></div>
+const para = weld.el('p', 'Hello world');
+weld.dom.append(container, para);
+container.outerHTML; // <div><button>Click me</button><p>Hello world</p></div>
 ```
 
 ### Finding Elements
@@ -228,12 +232,12 @@ container.outerHTML // <div><button>Click me</button><p>Hello world</p></div>
 There is a utility function for finding a single element (first match) or multiple elements (all matches) using a CSS selector. `weld.dom.get()` and `weld.dom.find()` respectively.
 
 ```js
-const container = weld.el('div')
-weld.dom.append(container, weld.el('div.classfind'))
-weld.dom.append(container, weld.el('div.classfind'))
+const container = weld.el('div');
+weld.dom.append(container, weld.el('div.classfind'));
+weld.dom.append(container, weld.el('div.classfind'));
 
-const first = weld.dom.get('div.classfind', container)
-const all = weld.dom.find('div.classfind', container)
+const first = weld.dom.get('div.classfind', container);
+const all = weld.dom.find('div.classfind', container);
 ```
 
 ## Examples
@@ -241,26 +245,29 @@ const all = weld.dom.find('div.classfind', container)
 ### Lazy Loading Images
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <img wd-bind="lazyLoad" wd-attr="image.jpg" src="placeholder.jpg">
 
 <script>
-    weld.bind('lazyLoad', function (el, src) {
-        weld.el(el, { src })
-    })
-    weld.apply()
+    weld.bind('lazyLoad', (el, src) => {
+        weld.el(el, { src });
+    });
 </script>
 ```
 
 ### External Link Handler
 
 ```html
+<script src="weld.js" wd-apply></script>
+
 <main wd-bind=externalLink>
     <p>This is an external link: <a href="https://www.github.com/eastcitysoftware">click here</a>.</p>
     <p>If you click it a new tab will open. Click <a href="https://github.com/eastcitysoftware/weld">this one</a> to also open a new tab.</p>
 </main>
 
 <script>
-    weld.bind('externalLink', function (el) {
+    weld.bind('externalLink', (el) => {
         for (const anchor of weld.dom.find('a', el)) {
             if (anchor.href
                 && anchor.href.startsWith('http')) {
@@ -268,7 +275,6 @@ const all = weld.dom.find('div.classfind', container)
             }
         }
     });
-    weld.apply()
 </script>
 ```
 
@@ -283,35 +289,34 @@ Instead, using _weld_ we can declaratively inject our components removing any re
 We **love** [mithril.js](https://mithril.js.org/), so to demonstrate the concept, we'll use it in the following example.
 
 ```html
+<script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
+<script src="weld.js" wd-apply></script>
+
 <div wd-bind="counter" wd-attr="weld"></div>
 
-<script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
-<script src="../weld.js"></script>
 <script>
     // A mithril component
     function HelloWorld() {
-        let count = 0
+        let count = 0;
 
         function OnClick() {
-            count++
+            count++;
         }
 
         return {
             view: function (vnode) {
-                var msg = 'Hello ' + vnode.attrs.name
+                var msg = 'Hello ' + vnode.attrs.name;
                 return m('div', [
                     m('p', `${msg}. You clicked the button ${count} times.`),
                     m('button', { onclick: OnClick }, 'Click me',),
-                ])
+                ]);
             }
-        }
+        };
     }
 
     weld.bind('counter', function (el, name) {
-        m.mount(el, { view: () => m(HelloWorld, { name: name }) })
-    })
-
-    weld.apply()
+        m.mount(el, { view: () => m(HelloWorld, { name: name }) });
+    });
 </script>
 ```
 
