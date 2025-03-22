@@ -5,7 +5,7 @@
 [![npm License](https://img.shields.io/npm/l/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 [![npm Downloads](https://img.shields.io/npm/dm/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 
-A small and powerful library for declarative JavaScript bind. Dead simple to use, no build required.
+A small and powerful library for declarative JavaScript binding. Dead simple to use, no build required.
 
 - [What is weld.js?](#what-is-weldjs)
 - [Installation](#installation)
@@ -38,7 +38,7 @@ npm install weld.js --save
 
 ### Initalizing weld.js
 
-weld.js is initialized by calling `weld.apply()`. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder. You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
+weld.js is initialized by calling `weld.apply()`, it' recommended to do within a DOMContentLoaded event listener to ensure the DOM is fully loaded. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder. You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
 
 ## Quick Start
 
