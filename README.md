@@ -75,10 +75,8 @@ Attaching functionality to DOM elements is achieved using the custom attribute `
 You can think of these bindings as components. They are reusable, self-contained pieces of functionality that can be attached to any element in the DOM. The binder function is called with the element, any parameters passed to it, and any named targets within the binding scope.
 
 ```html
-<script src="weld.js" wd-apply></script>
-
-<!-- a basic binding -->
 <div wd-bind="greet"></div>
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('greet', (el) => {
         weld.el(el, 'Hello world');
@@ -93,8 +91,6 @@ You can also pass parameters to the binder using the `wd-attr` attribute. This c
 This is useful for passing data from the server to the client, or for configuring the behavior of the binder.
 
 ```html
-<script src="weld.js" wd-apply></script>
-
 <!-- passing a string -->
 <div wd-bind="greetValue" wd-attr="pim"></div>
 
@@ -107,6 +103,7 @@ This is useful for passing data from the server to the client, or for configurin
 <!-- using JSON -->
 <div wd-bind="greetComplex" wd-attr='{"name":"pim"}'></div>
 
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('greetValue', (el, attr) => {
         const message = 'Hello ' + attr;
@@ -125,8 +122,6 @@ This is useful for passing data from the server to the client, or for configurin
 Declaratively define named targets using the `wd-target` attribute. This gives you keyed access to elements within the binding scope. This is useful when you need to manipulate or identify elements within a binding.
 
 ```html
-<script src="weld.js" wd-apply></script>
-
 <!-- designating a named target -->
 <div wd-bind="greetTarget" wd-attr="pim">
     <div wd-target=greeting></div>
@@ -140,6 +135,7 @@ Declaratively define named targets using the `wd-target` attribute. This gives y
     </div>
 </div>
 
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('greetTarget', (el, attr, targets) => {
         const message = 'Hello ' + attr;
@@ -190,12 +186,12 @@ const button = weld.el('button#myButton.myClass', 'Click me', {
 `weld.el()` can also be used to augment existing elements. By passing an element as the first argument, the attributes and content are applied to the element. This is useful when working with named targets.
 
 ```html
-<script src="weld.js" wd-apply></script>
-
 <div wd-bind="counter" wd-attr="99">
     <p>You clicked the button <span wd-target="count">0</span> times</p>
     <button wd-target="clicker">Click me</button>
 </div>
+
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('counter', (el, attr, targets) => {
         let count = attr;
@@ -245,10 +241,9 @@ const all = weld.dom.find('div.classfind', container);
 ### Lazy Loading Images
 
 ```html
-<script src="weld.js" wd-apply></script>
-
 <img wd-bind="lazyLoad" wd-attr="image.jpg" src="placeholder.jpg">
 
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('lazyLoad', (el, src) => {
         weld.el(el, { src });
@@ -259,13 +254,12 @@ const all = weld.dom.find('div.classfind', container);
 ### External Link Handler
 
 ```html
-<script src="weld.js" wd-apply></script>
-
 <main wd-bind=externalLink>
     <p>This is an external link: <a href="https://www.github.com/eastcitysoftware">click here</a>.</p>
     <p>If you click it a new tab will open. Click <a href="https://github.com/eastcitysoftware/weld">this one</a> to also open a new tab.</p>
 </main>
 
+<script src="weld.js" wd-apply></script>
 <script>
     weld.bind('externalLink', (el) => {
         for (const anchor of weld.dom.find('a', el)) {
@@ -289,11 +283,10 @@ Instead, using _weld_ we can declaratively inject our components removing any re
 We **love** [mithril.js](https://mithril.js.org/), so to demonstrate the concept, we'll use it in the following example.
 
 ```html
-<script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
-<script src="weld.js" wd-apply></script>
-
 <div wd-bind="counter" wd-attr="weld"></div>
 
+<script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
+<script src="weld.js" wd-apply></script>
 <script>
     // A mithril component
     function HelloWorld() {
