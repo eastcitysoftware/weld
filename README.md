@@ -1,4 +1,4 @@
-# weld.js
+# ✨weld.js
 
 [![build](https://github.com/eastcitysoftware/weld/actions/workflows/build.yml/badge.svg)](https://github.com/eastcitysoftware/weld/actions/workflows/build.yml)
 [![npm Version](https://img.shields.io/npm/v/weld.js.svg)](https://www.npmjs.com/package/weld.js)
