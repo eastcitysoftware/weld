@@ -5,7 +5,7 @@
 [![npm License](https://img.shields.io/npm/l/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 [![npm Downloads](https://img.shields.io/npm/dm/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 
-A small and powerful library for declarative JavaScript binding. Dead simple to use, no build required.
+A small and powerful library for declarative JavaScript binding. Dead simple to use, _**no build**_ required.
 
 - [What is weld.js?](#what-is-weldjs)
 - [Installation](#installation)
