@@ -5,7 +5,44 @@
 [![npm License](https://img.shields.io/npm/l/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 [![npm Downloads](https://img.shields.io/npm/dm/weld.js.svg)](https://www.npmjs.com/package/weld.js)
 
-Declarative DOM bindings for great good. Don't select it, _weld_ it.
+A small and powerful library for declarative JavaScript bind. Dead simple to use, no build required.
+
+- [What is weld.js?](#what-is-weldjs)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Creating Bindings](#creating-bindings)
+- [Passing Parameters](#passing-parameters)
+- [Defining Targets](#defining-targets)
+- [Working with the DOM](#working-with-the-dom)
+- [Examples](#examples)
+
+## What is weld.js?
+
+weld.js is a small, fast, and powerful library for declaratively binding JavaScript to the DOM. It's designed to be simple, lightweight, and easy to use. It's perfect for server-side rendered (SSR) applications, where you want to add a little interactivity without the need for a full-blown JavaScript framework. It pairs **brilliantly** with libraries like [htmx](https://htmx.org/).
+
+## Installation
+
+weld.js is roughly 200LOC so you can easily [copy + paste](https://github.com/eastcitysoftware/weld/blob/master/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
+
+### CDN
+
+```html
+<script src="https://unpkg.com/weld.js/weld.js"></script>
+```
+
+### npm
+
+```bash
+npm install weld.js --save
+```
+
+### Initalizing weld.js
+
+weld.js is initialized by calling `weld.apply()`. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder. You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
+
+## Quick Start
+
+ Below is a basic example demonstrating most of the concepts in weld.js. It shows how to create a binding that greets the user. The binding takes a `greeting` parameter from the server, 'Hello' in this case. The binding also has two named targets, `output` and `input`, which are used to display the greeting and capture the user input on change. Note the use of `wd-apply` on the script reference.
 
 ```html
 <div wd-bind="greeter" wd-attr="{ greeting: 'Hello' }">
@@ -31,31 +68,11 @@ Declarative DOM bindings for great good. Don't select it, _weld_ it.
 </script>
 ```
 
-## Introduction
-
-The main goal of this library is to make it obvious where client-side behavior exists. And stop relying on CSS selectors to associate JavaScript functionality to the DOM. Providing only what is necessary and nothing more. It is not a replacement for a full-fledged JavaScript framework. But rather a tool to help you write better, more maintainable code for multi-page applications.
-
-This is achieved by attaching functionality to DOM elements using the custom attribute `wd-bind="name"`, where "name" is the identifer for a binding defined using `weld.bind()`. Bindings can be passed parameters using the `wd-attr` attribute. Named targets can be designated using the `wd-target` attribute, giving you keyed access to elements within the binding scope.
-
-## Getting Started
-
-Weld is roughly 175LOC so you can easily [copy + paste](https://github.com/eastcitysoftware/weld/blob/master/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
-
-### CDN
-
-```html
-<script src="https://unpkg.com/weld.js/weld.js"></script>
-```
-
-### npm
-
-```bash
-npm install weld.js --save
-```
-
-## Usage
+## Creating Bindings
 
 Attaching functionality to DOM elements is achieved using the custom attribute `wd-bind="name"`, where "name" is the identifer for a binder defined using `weld.bind()`.
+
+You can think of these bindings as components. They are reusable, self-contained pieces of functionality that can be attached to any element in the DOM. The binder function is called with the element, any parameters passed to it, and any named targets within the binding scope.
 
 ```html
 <!-- a basic binding -->
@@ -69,7 +86,11 @@ Attaching functionality to DOM elements is achieved using the custom attribute `
 </script>
 ```
 
-You can also pass parameters to the binder using the `wd-attr` attribute. This can be a string, integer, object literal, or JSON.
+## Passing Parameters
+
+You can also pass parameters to the binder using the `wd-attr` attribute. This can be a string, integer, array, object literal, or JSON.
+
+This is useful for passing data from the server to the client, or for configuring the behavior of the binder.
 
 ```html
 <!-- passing a string -->
@@ -99,7 +120,9 @@ You can also pass parameters to the binder using the `wd-attr` attribute. This c
 </script>
 ```
 
-Declaratively define named targets using the `wd-target` attribute. This gives you keyed access to elements within the binding scope.
+## Defining Targets
+
+Declaratively define named targets using the `wd-target` attribute. This gives you keyed access to elements within the binding scope. This is useful when you need to manipulate or identify elements within a binding.
 
 ```html
 <!-- designating a named target -->
@@ -136,11 +159,13 @@ Declaratively define named targets using the `wd-target` attribute. This gives y
 
 ## Working with the DOM
 
-Weld comes with a few utilies to make creating and manipulating DOM elements easier.
+weld.js comes with a few utilies to make creating and manipulating DOM elements easier.
 
 ### Creating Elements
 
 The first is `weld.el()` which is a DOM swiss army knife. It can create new elements and modify existing ones. When the first argument is a string literal tag name, a new element will be creating. Attributes are provided as an object literal and can include event listeners, denoted by prefixing the attribute name with `on`.
+
+Below is an example of creating a button element with an ID, class, text content, and an onclick event listener.
 
 ```js
 const button = weld.el('button', {
@@ -184,7 +209,7 @@ const button = weld.el('button#myButton.myClass', 'Click me', {
 
 ### Manipulating Elements
 
-When manipulating element content, you are typically either appending content or replacing it. Weld provides two functions for this, `weld.dom.append()` and `weld.dom.set()`. Both functions take an element as the first parameter and one or more elements as the second parameter.
+When manipulating element content, you are typically either appending content or replacing it. weld.js provides two functions for this, `weld.dom.append()` and `weld.dom.set()`. Both functions take an element as the first parameter and one or more elements as the second parameter.
 
 ```js
 const container = weld.el('div')
