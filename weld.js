@@ -1,3 +1,8 @@
+/*!
+ * weld.js v3.x (https://github.com/eastcitysoftware/weld)
+ * Copyright 2025 East City Software, Pim Brouwers
+ * Licensed under Apache 2.0 (https://github.com/eastcitysoftware/weld/blob/master/LICENSE)
+ */
 (function (GLOBAL) {
     'use strict';
 

@@ -38,7 +38,9 @@ npm install weld.js --save
 
 ### Initalizing weld.js
 
-weld.js is initialized by calling `weld.apply()`, it' recommended to do within a DOMContentLoaded event listener to ensure the DOM is fully loaded. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder. You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
+weld.js is initialized by calling `weld.apply()`. It's recommended that you call the function do within a DOMContentLoaded event listener. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder.
+
+> You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
 
 ## Quick Start
 
