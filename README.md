@@ -20,6 +20,8 @@ A small and powerful library for declarative JavaScript binding. Dead simple to 
 
 weld.js is a small, fast, and powerful library for declaratively binding JavaScript to the DOM. It's designed to be simple, lightweight, and easy to use. It's perfect for server-side rendered (SSR) applications, where you want to add a little interactivity without the need for a full-blown JavaScript framework. It pairs **brilliantly** with libraries like [htmx](https://htmx.org/).
 
+The beauty is, there really isn't [much to it](#quick-start). It's just a few attributes and functions to bind JavaScript to the DOM. At which point you're just writing JavaScript. You can use it with any JavaScript framework, or even without one. In fact, you can go a _very_ long way just including weld.js and having a single script file with your binding definitions.
+
 ## Installation
 
 weld.js is roughly 200LOC so you can easily [copy + paste](https://github.com/eastcitysoftware/weld/blob/master/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
@@ -66,6 +68,19 @@ weld.js is initialized by calling `weld.apply()`. It's recommended that you call
         weld.el(targets.input, {
             oninput: e => setGreeting(e.target.value)
         });
+    });
+</script>
+```
+
+> Note: if we omit the `wd-apply` attribute, we need to call `weld.apply()` manually. This is typically done in a DOMContentLoaded event listener.
+
+```html
+<script src="weld.js"></script>
+<script>
+    // ... bindings
+
+    document.addEventListener('DOMContentLoaded', () => {
+        weld.apply();
     });
 </script>
 ```
