@@ -38,12 +38,6 @@ weld.js is roughly 200LOC so you can easily [copy + paste](https://github.com/ea
 npm install weld.js --save
 ```
 
-### Initalizing weld.js
-
-weld.js is initialized by calling `weld.apply()`. It's recommended that you call the function do within a DOMContentLoaded event listener. This function will search within the element scope (defaults to document) for elements with the `wd-bind` attribute and apply the corresponding binder.
-
-> You can also "auto-apply" the bindings by adding the `wd-apply` attribute to the script tag.
-
 ## Quick Start
 
  Below is a basic example demonstrating most of the concepts in weld.js. It shows how to create a binding that greets the user. The binding takes a `greeting` parameter from the server, 'Hello' in this case. The binding also has two named targets, `output` and `input`, which are used to display the greeting and capture the user input on change. Note the use of `wd-apply` on the script reference.
@@ -72,7 +66,7 @@ weld.js is initialized by calling `weld.apply()`. It's recommended that you call
 </script>
 ```
 
-> Note: if we omit the `wd-apply` attribute, we need to call `weld.apply()` manually. This is typically done in a DOMContentLoaded event listener.
+> Note: if you omit the `wd-apply` attribute, you need to call `weld.apply()` manually. This is typically done in a DOMContentLoaded event listener.
 
 ```html
 <script src="weld.js"></script>
@@ -293,11 +287,11 @@ const all = weld.dom.find('div.classfind', container);
 
 Many JavaScript frameworks typically angle their value proposition toward single-page application (SPA) development. But many of them are actually extremely viable options for multi-page application (MPA) development as well. Think of these as server-side application with ~sprinklings~ of JavaScript enhancements.
 
-When building a SPA we create a root element, `<div id="root"></div>`, pass it to our framework of choice and it takes over from there. Effectively eliminating the brittle CSS<->JS relationship. But in MPA development, there isn't a clean entry-point like this, since the markup is primarily generated server-side. Thus, we often turn to using existing (or creating new) classes to begin attaching our JavaScript logic.
+When building a SPA you create a root element, `<div id="root"></div>`, pass it to our framework of choice and it takes over from there. Effectively eliminating the brittle CSS<->JS relationship. But in MPA development, there isn't a clean entry-point like this, since the markup is primarily generated server-side. Thus, you often turn to using existing (or creating new) classes to begin attaching our JavaScript logic.
 
-Instead, using _weld_ we can declaratively inject our components removing any reliance on selectors for activation.
+Instead, using _weld_ you can declaratively inject our components removing any reliance on selectors for activation.
 
-We **love** [mithril.js](https://mithril.js.org/), so to demonstrate the concept, we'll use it in the following example.
+[mithril.js](https://mithril.js.org/) is an amazing JavaScript project, so it will be used to demonstrate the concept in the example below.
 
 ```html
 <div wd-bind="counter" wd-attr="weld"></div>
@@ -324,6 +318,7 @@ We **love** [mithril.js](https://mithril.js.org/), so to demonstrate the concept
         };
     }
 
+    // Mount the mithril component using a weld binding
     weld.bind('counter', function (el, name) {
         m.mount(el, { view: () => m(HelloWorld, { name: name }) });
     });
@@ -336,4 +331,4 @@ There's an [issue](https://github.com/eastcitysoftware/weld/issues) for that.
 
 ## License
 
-Licensed under [Apache License 2.0](https://github.com/eastcitysoftware/weld/blob/master/LICENSE).
+Licensed under [MIT](https://github.com/eastcitysoftware/weld/blob/master/LICENSE).
