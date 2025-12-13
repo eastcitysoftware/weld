@@ -11,13 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - name: Setup Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.bun/bin:$PATH"
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install
 
       - name: Test
-        run: npm test
+        run: bun test
