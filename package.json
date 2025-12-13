@@ -1,39 +1,34 @@
 {
-  "name": "weld.js",
-  "version": "3.0.0-beta.0",
-  "description": "Declarative DOM Bindings for great good.",
-  "main": "weld",
-  "browser": "weld.js",
-  "files": [
-    "weld*.js"
-  ],
-  "scripts": {
-    "start": "uglifyjs weld.js -m -c > weld.min.js",
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eastcitysoftware/weld.git"
-  },
-  "keywords": [
-    "dom",
-    "bindings",
-    "declarative",
-    "bindings"
-  ],
-  "author": "East City Software, Pim Brouwers & contributors",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/eastcitysoftware/weld/issues"
-  },
-  "homepage": "https://github.com/eastcitysoftware/weld#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "uglify-js": "^3.19.3"
-  },
-  "jest": {
-    "testEnvironment": "jsdom"
-  }
+    "name": "weld.js",
+    "version": "3.0.0-beta.0",
+    "description": "Declarative DOM Bindings for great good.",
+    "main": "weld",
+    "browser": "weld.js",
+    "files": [
+        "weld*.js"
+    ],
+    "scripts": {
+        "build": "bun build src/index.js --outfile=weld.js --no-bundle && bun build src/index.js --outfile=weld.min.js --minify --no-bundle",
+        "test": "bun test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/eastcitysoftware/weld.git"
+    },
+    "keywords": [
+        "dom",
+        "bindings",
+        "declarative",
+        "bindings"
+    ],
+    "author": "East City Software, Pim Brouwers & contributors",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/eastcitysoftware/weld/issues"
+    },
+    "homepage": "https://github.com/eastcitysoftware/weld#readme",
+    "dependencies": {},
+    "devDependencies": {
+        "@happy-dom/global-registrator": "^20.0.11"
+    }
 }

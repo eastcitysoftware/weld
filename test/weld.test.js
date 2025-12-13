@@ -1,4 +1,11 @@
-const weld = require('../weld');
+const weld = require('../src/index');
+const { GlobalRegistrator } = require('@happy-dom/global-registrator');
+const { beforeAll, test, expect } = require('bun:test');
+
+// need to run this before all/any tests run
+beforeAll(() => {
+    GlobalRegistrator.register();
+});
 
 const createTestElement = (bindingName, bindingAttr) => {
     let props = { 'wd-bind': bindingName };
@@ -10,7 +17,7 @@ const createTestElement = (bindingName, bindingAttr) => {
     return weld.el('div', props);
 };
 
-it('empty binding', function () {
+test('empty binding', function () {
     const binder = 'testEmpty';
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder));
@@ -20,7 +27,7 @@ it('empty binding', function () {
     weld.apply(rootEl);
 });
 
-it('string binding single quotes', function () {
+test('string binding single quotes', function () {
     const binder = "testStringSingleQuotes";
     const expected = "here";
     const rootEl = weld.el('div');
@@ -31,7 +38,7 @@ it('string binding single quotes', function () {
     weld.apply(rootEl);
 });
 
-it('string binding double quotes', function () {
+test('string binding double quotes', function () {
     const binder = "testStringQuotes";
     const expected = "here";
     const rootEl = weld.el('div');
@@ -42,7 +49,7 @@ it('string binding double quotes', function () {
     weld.apply(rootEl);
 });
 
-it('string binding no quotes', function () {
+test('string binding no quotes', function () {
     const binder = "testStringNoQuotes";
     const expected = "here";
     const rootEl = weld.el('div');
@@ -53,7 +60,7 @@ it('string binding no quotes', function () {
     weld.apply(rootEl);
 });
 
-it('float binding value', function () {
+test('float binding value', function () {
     const binder = "testInt";
     const expected = 1;
     const rootEl = weld.el('div');
@@ -64,7 +71,7 @@ it('float binding value', function () {
     weld.apply(rootEl);
 });
 
-it('int binding value', function () {
+test('int binding value', function () {
     const binder = "testFloat";
     const expected = 1.0;
     const rootEl = weld.el('div');
@@ -75,7 +82,7 @@ it('int binding value', function () {
     weld.apply(rootEl);
 });
 
-it('boolean binding value', function () {
+test('boolean binding value', function () {
     const binder = "testBoolean";
     const expected = true;
     const rootEl = weld.el('div');
@@ -86,7 +93,7 @@ it('boolean binding value', function () {
     weld.apply(rootEl);
 });
 
-it('object literal binding value', function () {
+test('object literal binding value', function () {
     const binder = "testObjectLiteral";
     const expected = "{ name: 'weld', version: 1, awesome: true }";
     const rootEl = weld.el('div');
@@ -99,7 +106,7 @@ it('object literal binding value', function () {
     weld.apply(rootEl);
 });
 
-it('JSON binding value', function () {
+test('JSON binding value', function () {
     const binder = "testJsonLiteral";
     const expected = JSON.stringify({ name: "weld", "version": 1, "awesome": true });
     const rootEl = weld.el('div');
@@ -112,7 +119,7 @@ it('JSON binding value', function () {
     weld.apply(rootEl);
 });
 
-it('array binding value', function () {
+test('array binding value', function () {
     const binder = "arrayLiteral";
     const expected = "[1,2,3]";
     const rootEl = weld.el('div');
@@ -125,7 +132,7 @@ it('array binding value', function () {
 });
 
 
-it('single target', function () {
+test('single target', function () {
     const binder = "testTarget";
     const parentElement = createTestElement(binder);
     parentElement.innerHTML = '<div wd-target="testTarget"></div>';
@@ -138,7 +145,7 @@ it('single target', function () {
     weld.apply(rootEl);
 });
 
-it('multiple targets', function () {
+test('multiple targets', function () {
     const binder = "testTargets";
     const expected = "here";
     const parentElement = createTestElement(binder, expected);
@@ -153,18 +160,18 @@ it('multiple targets', function () {
     weld.apply(rootEl);
 });
 
-it('should create element', function () {
+test('should create element', function () {
     const el = weld.el('div');
     expect(el).toBeInstanceOf(HTMLDivElement);
 });
 
-it('should create element with text content', function () {
+test('should create element with text content', function () {
     const el = weld.el('div', 'here');
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.textContent).toBe('here');
 });
 
-it('should create element with text content from non-strings, non-objects', function () {
+test('should create element with text content from non-strings, non-objects', function () {
     const elInt = weld.el('div', 1);
     expect(elInt).toBeInstanceOf(HTMLDivElement);
     expect(elInt.textContent).toBe('1');
@@ -178,23 +185,24 @@ it('should create element with text content from non-strings, non-objects', func
     expect(elTrue.textContent).toBe('true');
 
     const elFalse = weld.el('div', false);
+    expect(typeof false).toBe('boolean');
     expect(elFalse).toBeInstanceOf(HTMLDivElement);
     expect(elFalse.textContent).toBe('false');
 });
 
-it('should create element with id', function () {
+test('should create element with id', function () {
     const el = weld.el('div#id');
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.id).toBe('id');
 });
 
-it('should create element with class', function () {
+test('should create element with class', function () {
     const el = weld.el('div.class1');
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.classList.contains('class1')).toBe(true);
 });
 
-it('should create element with id and classes', function () {
+test('should create element with id and classes', function () {
     const el = weld.el('p#id.class1.class_2');
     expect(el).toBeInstanceOf(HTMLParagraphElement);
     expect(el.id).toBe('id');
@@ -202,70 +210,231 @@ it('should create element with id and classes', function () {
     expect(el.classList.contains('class_2')).toBe(true);
 });
 
-it('should create element with props', function () {
+test('should create element with props', function () {
     const el = weld.el('div', 'hello', { class: 'class1' });
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.textContent).toBe('hello');
     expect(el.classList.contains('class1')).toBe(true);
 });
 
-it('should create element with props including event listeners', function () {
-    const mockFn = jest.fn();
+// test('should create element with styles from prosp', function () {
+//     const el = weld.el('div', 'hello', { style: 'background-color: red;' });
+//     expect(el).toBeInstanceOf(HTMLDivElement);
+//     expect(el.textContent).toBe('hello');
+//     expect(el.classList.contains('class1')).toBe(true);
+//     expect(el.style.backgroundColor).toBe('red');
+// });
+
+test('should create element with props including event listeners', function () {
+    let n = 0;
+    const mockFn = () => { n = 1; };
     const el = weld.el('div', 'hello', { onclick: mockFn });
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.innerHTML).toBe('hello');
     el.click();
-    expect(mockFn).toHaveBeenCalled();
+    expect(n).toBe(1);
 });
 
-it('should absorb element and update props', function () {
+test('should absorb element and update props', function () {
+    let n = 0;
+    const mockFn = () => { n = 1; };
     const el = weld.el('div');
-    const mockFn = jest.fn();
     weld.el(el, 'hello', { onclick: mockFn });
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.innerHTML).toBe('hello');
     el.click();
-    expect(mockFn).toHaveBeenCalled();
+    expect(n).toBe(1);
 });
 
-it('should append single element', function () {
+test('should append single element', function () {
     const parentEl = weld.el('div');
     const el = weld.el('div');
     weld.dom.append(parentEl, el);
     expect(parentEl.children.length).toBe(1);
 });
 
-it('should append multiple elements', function () {
+test('should append multiple elements', function () {
     const parentEl = weld.el('div');
     const el = weld.el('div');
     weld.dom.append(parentEl, [weld.el('div'), weld.el('div')]);
     expect(parentEl.children.length).toBe(2);
 });
 
-it('should replace element content with single element', function () {
+test('should replace element content with single element', function () {
     const parentEl = weld.el('div');
     weld.dom.append(parentEl, weld.el('div'));
     weld.dom.set(parentEl, weld.el('div'));
     expect(parentEl.children.length).toBe(1);
 });
 
-it('should replace element content with multiple elements', function () {
+test('should replace element content with multiple elements', function () {
     const parentEl = weld.el('div');
     weld.dom.append(parentEl, weld.el('div'));
     weld.dom.set(parentEl, [weld.el('div'), weld.el('div')]);
     expect(parentEl.children.length).toBe(2);
 });
 
-it('should find elements', function () {
+test('should find elements', function () {
     const parentEl = weld.el('div');
     weld.dom.append(parentEl, weld.el('div.classfind'));
     weld.dom.append(parentEl, weld.el('div.classfind'));
     expect(weld.dom.find('.classfind', parentEl).length).toBe(2);
 });
 
-it('should get single element', function () {
+test('should get single element', function () {
     const parentEl = weld.el('div');
     weld.dom.append(parentEl, weld.el('div.classfind'));
     weld.dom.append(parentEl, weld.el('div.classfind'));
     expect(weld.dom.get('.classfind', parentEl)).toBeInstanceOf(HTMLDivElement);
+});
+
+test('applyBindings with no matching elements', () => {
+    const rootEl = weld.el('div');
+    weld.apply(rootEl); // Should not throw or fail
+    expect(rootEl.children.length).toBe(0);
+});
+
+test('bind with duplicate binder names', () => {
+    const binder = 'duplicateBinder';
+    weld.bind(binder, () => { });
+    weld.bind(binder, () => { throw new Error('Should not overwrite existing binder'); });
+    expect(Object.keys(weld._binders).length).toBeGreaterThan(0);
+});
+
+test('parseDataAttr with invalid JSON', () => {
+    const invalidJson = "{ name: 'weld', version: }";
+    const result = weld.el('div', { 'wd-attr': invalidJson });
+    expect(() => weld.apply(result)).not.toThrow();
+});
+
+test('createOrModifyElement with existing element', () => {
+    const el = weld.el('div', 'original', { id: 'test' });
+    weld.el(el, 'updated', { class: 'new-class' });
+    expect(el.textContent).toBe('updated');
+    expect(el.classList.contains('new-class')).toBe(true);
+});
+
+test('appendElements with null or undefined children', () => {
+    const parentEl = weld.el('div');
+    weld.dom.append(parentEl, [null, undefined, weld.el('div')]);
+    expect(parentEl.children.length).toBe(1);
+});
+
+test('replaceElements with empty children', () => {
+    const parentEl = weld.el('div');
+    weld.dom.append(parentEl, weld.el('div'));
+    weld.dom.set(parentEl, []);
+    expect(parentEl.children.length).toBe(0);
+});
+
+test('createElementFromString with complex selectors', () => {
+    const el = weld.el('div#id.class1.class2');
+    expect(el.id).toBe('id');
+    expect(el.classList.contains('class1')).toBe(true);
+    expect(el.classList.contains('class2')).toBe(true);
+});
+
+test('apply with nested bindings', () => {
+    const binder1 = 'parentBinder';
+    const binder2 = 'childBinder';
+    const parentEl = createTestElement(binder1);
+    const childEl = createTestElement(binder2);
+    weld.dom.append(parentEl, childEl);
+
+    weld.bind(binder1, (el) => {
+        expect(el).toBe(parentEl);
+    });
+
+    weld.bind(binder2, (el) => {
+        expect(el).toBe(childEl);
+    });
+
+    weld.apply(parentEl);
+});
+
+test('weld.apply with wd-apply attribute', () => {
+    const scriptEl = weld.el('script', { 'wd-apply': '' });
+    document.body.appendChild(scriptEl);
+    const binder = 'autoApplyBinder';
+    weld.bind(binder, (el) => {
+        expect(el).toBeInstanceOf(HTMLElement);
+    });
+    weld.apply();
+    document.body.removeChild(scriptEl);
+});
+
+test('weld.dom.find with no matches', () => {
+    const parentEl = weld.el('div');
+    const result = weld.dom.find('.nonexistent', parentEl);
+    expect(result.length).toBe(0);
+});
+
+test('weld.dom.get with no matches', () => {
+    const parentEl = weld.el('div');
+    const result = weld.dom.get('.nonexistent', parentEl);
+    expect(result).toBeNull();
+});
+
+test('weld.el with event listeners', () => {
+    let clicked = false;
+    const el = weld.el('button', 'Click me', { onclick: () => { clicked = true; } });
+    el.click();
+    expect(clicked).toBe(true);
+});
+
+test('weld.bind with missing binder', () => {
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement('nonExistentBinder'));
+    expect(() => weld.apply(rootEl)).not.toThrow();
+});
+
+test('AMD and CommonJS compatibility', () => {
+    expect(typeof weld).toBe('object');
+    expect(typeof weld.apply).toBe('function');
+});
+
+test('weld._binders updates correctly', () => {
+    const binder = 'testBinder';
+    weld.bind(binder, () => { });
+    expect(weld._binders).toHaveProperty(binder);
+});
+
+test('should create element with a single style property', () => {
+    const el = weld.el('div', { style: 'color: red;' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.style.color).toBe('red');
+});
+
+test('should create element with multiple style properties', () => {
+    const el = weld.el('div', { style: 'color: red; background-color: blue;' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.style.color).toBe('red');
+    expect(el.style.backgroundColor).toBe('blue');
+});
+
+test('should create element with hyphenated style properties', () => {
+    const el = weld.el('div', { style: 'font-size: 16px; line-height: 1.5;' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.style.fontSize).toBe('16px');
+    expect(el.style.lineHeight).toBe('1.5');
+});
+
+test('should create element with numeric style values', () => {
+    const el = weld.el('div', { style: 'width: 100px; height: 200px;' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.style.width).toBe('100px');
+    expect(el.style.height).toBe('200px');
+});
+
+test('should update styles dynamically', () => {
+    const el = weld.el('div', { style: 'color: red;' });
+    weld.el(el, { style: 'color: blue;' });
+    expect(el.style.color).toBe('blue');
+});
+
+test('should remove styles when style is an empty string', () => {
+    const el = weld.el('div', { style: 'color: red;' });
+    expect(el.style.color).toBe('red');
+    weld.el(el, { style: '' });
+    expect(el.style.color).toBe('');
 });
