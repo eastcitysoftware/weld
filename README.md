@@ -24,7 +24,7 @@ The beauty is, there really isn't [much to it](#quick-start). It's just a few at
 
 ## Installation
 
-weld.js is roughly 200LOC so you can easily [copy + paste](https://github.com/eastcitysoftware/weld/blob/master/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
+weld.js is less than 200LOC so you can easily [copy + paste](/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
 
 ### CDN
 

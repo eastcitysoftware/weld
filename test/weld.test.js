@@ -28,7 +28,7 @@ test('empty binding', function () {
 });
 
 test('string binding single quotes', function () {
-    const binder = "testStringSingleQuotes";
+    const binder = "'testStringSingleQuotes'";
     const expected = "here";
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder, expected));
@@ -39,7 +39,7 @@ test('string binding single quotes', function () {
 });
 
 test('string binding double quotes', function () {
-    const binder = "testStringQuotes";
+    const binder = "\"testStringQuotes\"";
     const expected = "here";
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder, expected));
@@ -60,6 +60,50 @@ test('string binding no quotes', function () {
     weld.apply(rootEl);
 });
 
+test('string binding with spaces', function () {
+    const binder = "testStringWithSpaces";
+    const expected = "here is a string with spaces";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
+test('string binding with url', function () {
+    const binder = "testStringWithUrl";
+    const expected = "https://example.com/path?query=string&another=value";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
+test('string binding with relative path', function () {
+    const binder = "testStringWithRelativePath";
+    const expected = "/path/to/resource";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
+test('string binding with special characters', function () {
+    const binder = "testStringWithSpecialChars";
+    const expected = "!@#$%^&*()_+-=[]{}|;':\",./<>?";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
 test('float binding value', function () {
     const binder = "testInt";
     const expected = 1;
@@ -71,9 +115,31 @@ test('float binding value', function () {
     weld.apply(rootEl);
 });
 
+test('negative float binding value', function () {
+    const binder = "testNegativeFloat";
+    const expected = -1.5;
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
 test('int binding value', function () {
     const binder = "testFloat";
     const expected = 1.0;
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBe(expected);
+    });
+    weld.apply(rootEl);
+});
+
+test('negative int binding value', function () {
+    const binder = "testNegativeInt";
+    const expected = -1;
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder, expected));
     weld.bind(binder, function (el, attr) {
@@ -95,26 +161,34 @@ test('boolean binding value', function () {
 
 test('object literal binding value', function () {
     const binder = "testObjectLiteral";
-    const expected = "{ name: 'weld', version: 1, awesome: true }";
+    const expected = "{ name: 'weld', version: 1, awesome: true, nums: [1, 2, 3], tags: ['a', 'b', 'c'], nested: { a: 1, b: 2, label: 'ok' }, items: [{ id: 1, title: 'first' }, { id: 2, title: 'second' }] }";
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder, expected));
     weld.bind(binder, function (el, attr) {
         expect(attr.name).toBe('weld');
         expect(attr.version).toBe(1);
         expect(attr.awesome).toBe(true);
+        expect(attr.nums).toEqual([1, 2, 3]);
+        expect(attr.tags).toEqual(['a', 'b', 'c']);
+        expect(attr.nested).toEqual({ a: 1, b: 2, label: 'ok' });
+        expect(attr.items).toEqual([{ id: 1, title: 'first' }, { id: 2, title: 'second' }]);
     });
     weld.apply(rootEl);
 });
 
 test('JSON binding value', function () {
     const binder = "testJsonLiteral";
-    const expected = JSON.stringify({ name: "weld", "version": 1, "awesome": true });
+    const expected = JSON.stringify({ name: "weld", "version": 1, "awesome": true, "nums": [1, 2, 3], "tags": ["a", "b", "c"], "nested": { "a": 1, "b": 2, "label": "ok" }, "items": [{ "id": 1, "title": "first" }, { "id": 2, "title": "second" }] });
     const rootEl = weld.el('div');
     weld.dom.append(rootEl, createTestElement(binder, expected));
     weld.bind(binder, function (el, attr) {
         expect(attr.name).toBe('weld');
         expect(attr.version).toBe(1);
         expect(attr.awesome).toBe(true);
+        expect(attr.nums).toEqual([1, 2, 3]);
+        expect(attr.tags).toEqual(['a', 'b', 'c']);
+        expect(attr.nested).toEqual({ a: 1, b: 2, label: 'ok' });
+        expect(attr.items).toEqual([{ id: 1, title: 'first' }, { id: 2, title: 'second' }]);
     });
     weld.apply(rootEl);
 });
@@ -127,10 +201,36 @@ test('array binding value', function () {
     weld.bind(binder, function (el, attr) {
         expect(attr).toBeInstanceOf(Array);
         expect(attr.length).toBe(3);
+        expect(attr).toEqual([1, 2, 3]);
     });
     weld.apply(rootEl);
 });
 
+test('array binding value strings', function () {
+    const binder = "arrayLiteralStrings";
+    const expected = "['1','2','3']";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBeInstanceOf(Array);
+        expect(attr.length).toBe(3);
+        expect(attr).toEqual(["1", "2", "3"]);
+    });
+    weld.apply(rootEl);
+});
+
+test('array binding value objects', function () {
+    const binder = "arrayLiteralObjects";
+    const expected = "[{name:'weld'},{name:'weld2'}]";
+    const rootEl = weld.el('div');
+    weld.dom.append(rootEl, createTestElement(binder, expected));
+    weld.bind(binder, function (el, attr) {
+        expect(attr).toBeInstanceOf(Array);
+        expect(attr.length).toBe(2);
+        expect(attr).toEqual([{ name: 'weld' }, { name: 'weld2' }]);
+    });
+    weld.apply(rootEl);
+});
 
 test('single target', function () {
     const binder = "testTarget";
@@ -210,20 +310,37 @@ test('should create element with id and classes', function () {
     expect(el.classList.contains('class_2')).toBe(true);
 });
 
-test('should create element with props', function () {
+test('should create element with single class prop', function () {
     const el = weld.el('div', 'hello', { class: 'class1' });
     expect(el).toBeInstanceOf(HTMLDivElement);
     expect(el.textContent).toBe('hello');
     expect(el.classList.contains('class1')).toBe(true);
 });
 
-// test('should create element with styles from prosp', function () {
-//     const el = weld.el('div', 'hello', { style: 'background-color: red;' });
-//     expect(el).toBeInstanceOf(HTMLDivElement);
-//     expect(el.textContent).toBe('hello');
-//     expect(el.classList.contains('class1')).toBe(true);
-//     expect(el.style.backgroundColor).toBe('red');
-// });
+test('should create element with multiple class props', function () {
+    const el = weld.el('div', 'hello', { class: 'class1 class2' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.textContent).toBe('hello');
+    expect(el.classList.contains('class1')).toBe(true);
+    expect(el.classList.contains('class2')).toBe(true);
+});
+
+test('should create element and toggle class', function () {
+    const el = weld.el('div', 'hello', { class: 'class1' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.textContent).toBe('hello');
+    expect(el.classList.contains('class1')).toBe(true);
+    weld.el(el, { class: '' });
+    expect(el.classList.contains('class1')).toBe(false);
+});
+
+test('should create element with styles and class from props', function () {
+    const el = weld.el('div', 'hello', { class: 'class1', style: 'background-color: red;' });
+    expect(el).toBeInstanceOf(HTMLDivElement);
+    expect(el.textContent).toBe('hello');
+    expect(el.classList.contains('class1')).toBe(true);
+    expect(el.style.backgroundColor).toBe('red');
+});
 
 test('should create element with props including event listeners', function () {
     let n = 0;

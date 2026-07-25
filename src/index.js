@@ -121,30 +121,36 @@
         }
 
         let bindingJson = "";
-        if (value.startsWith('{')) {
-            // Convert object-like strings into valid JSON
-            bindingJson =
-                value
-                    .replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3') // Add quotes around keys
-                    .replace(/(:\s*)'([\w\s\n\r!"#$%&()*+,-./:<=>?@[\]^_`{|}~]+)'/g, '$1"$2"'); // Convert single-quoted strings to double-quoted
+
+        value = value.trim();
+
+        // Convert object-like strings into valid JSON
+        if (value.startsWith('{') || value.startsWith('[')) {
+            bindingJson = convertObjectLiteralToJsonString(value);
         }
+        // Handle boolean `true`
         else if (/^true$/i.test(value)) {
-            bindingJson = true; // Handle boolean `true`
+            bindingJson = true;
         }
+        // Handle boolean `false`
         else if (/^false$/i.test(value)) {
-            bindingJson = false; // Handle boolean `false`
+            bindingJson = false;
         }
-        else if (/^\d+/.test(value)) {
-            bindingJson = parseInt(value); // Handle integers
+        // Handle floats
+        else if (/^-?\d*\.\d+$/.test(value)) {
+            bindingJson = parseFloat(value);
         }
-        else if (/^\d\.+/.test(value)) {
-            bindingJson = parseFloat(value); // Handle floats
+        // Handle integers
+        else if (/^-?\d+$/.test(value)) {
+            bindingJson = parseInt(value, 10);
         }
-        else if (/^\w/i.test(value)) {
-            bindingJson = `"${value}"`; // Handle strings
+        // Handle strings (unquoted)
+        else if (/^(?![{[\s])/.test(value)) {
+            bindingJson = `"${normalizeQuotes(value)}"`;
         }
+        // Fallback for other cases
         else {
-            bindingJson = value; // Fallback for other cases
+            bindingJson = value;
         }
 
         try {
@@ -157,6 +163,26 @@
         }
     }
 
+    /**
+     * Convert an object literal string into a valid JSON string.
+     * @param {string} value - The object literal string to convert.
+     * @returns {string} The converted JSON string.
+     */
+    function convertObjectLiteralToJsonString(value) {
+        return value
+            // Add quotes around keys
+            .replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3')
+            // Convert single-quoted strings to double-quoted
+            .replace(/'((?:\\.|[^'\\])*)'/g, (_, innerValue) => `"${normalizeQuotes(innerValue)}"`);
+    }
+
+    function normalizeQuotes(value) {
+        return value
+            // Convert single-quoted strings to double-quoted
+            .replace(/\\'/g, "'")
+            // Escape double quotes
+            .replace(/"/g, '\\"');
+    }
     /**
      * Add a new binder to the registry.
      * @param {string} name - The name of the binder.

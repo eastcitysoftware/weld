@@ -56,18 +56,19 @@
       return null;
     }
     let bindingJson = "";
-    if (value.startsWith("{")) {
-      bindingJson = value.replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3').replace(/(:\s*)'([\w\s\n\r!"#$%&()*+,-./:<=>?@[\]^_`{|}~]+)'/g, '$1"$2"');
+    value = value.trim();
+    if (value.startsWith("{") || value.startsWith("[")) {
+      bindingJson = convertObjectLiteralToJsonString(value);
     } else if (/^true$/i.test(value)) {
       bindingJson = true;
     } else if (/^false$/i.test(value)) {
       bindingJson = false;
-    } else if (/^\d+/.test(value)) {
-      bindingJson = parseInt(value);
-    } else if (/^\d\.+/.test(value)) {
+    } else if (/^-?\d*\.\d+$/.test(value)) {
       bindingJson = parseFloat(value);
-    } else if (/^\w/i.test(value)) {
-      bindingJson = `"${value}"`;
+    } else if (/^-?\d+$/.test(value)) {
+      bindingJson = parseInt(value, 10);
+    } else if (/^(?![{[\s])/.test(value)) {
+      bindingJson = `"${normalizeQuotes(value)}"`;
     } else {
       bindingJson = value;
     }
@@ -77,6 +78,12 @@
       console.error("Invalid binding data:", value, error);
       return {};
     }
+  }
+  function convertObjectLiteralToJsonString(value) {
+    return value.replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3').replace(/'((?:\\.|[^'\\])*)'/g, (_, innerValue) => `"${normalizeQuotes(innerValue)}"`);
+  }
+  function normalizeQuotes(value) {
+    return value.replace(/\\'/g, "'").replace(/"/g, "\\\"");
   }
   function addBinder(name, fn) {
     if (!weld._binders.hasOwnProperty(name)) {
