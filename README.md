@@ -18,13 +18,15 @@ A small and powerful library for declarative JavaScript binding. Dead simple to 
 
 ## What is weld.js?
 
-weld.js is a small, fast, and powerful library for declaratively binding JavaScript to the DOM. It's designed to be simple, lightweight, and easy to use. It's perfect for server-side rendered (SSR) applications, where you want to add a little interactivity without the need for a full-blown JavaScript framework. It pairs **brilliantly** with libraries like [htmx](https://htmx.org/).
+weld.js is a small, fast, and powerful library for declaratively binding JavaScript to the DOM. It's designed to be simple, lightweight, and easy to use. It's perfect for server-side rendered (SSR) applications, where you want to add interactivity without the need for a full-blown JavaScript framework. It pairs **brilliantly** with libraries like [htmx](https://htmx.org/).
 
-The beauty is, there really isn't [much to it](#quick-start). It's just a few attributes and functions to bind JavaScript to the DOM. At which point you're just writing JavaScript. You can use it with any JavaScript framework, or even without one. In fact, you can go a _very_ long way just including weld.js and having a single script file with your binding definitions.
+> 💡 I want to be able to declaratively bind JavaScript to the DOM, and have it just work.
+
+The beauty is, there really isn't [much to it](#quick-start). It's just a few attributes and functions to bind JavaScript to the DOM. At which point you're just writing vanilla JavaScript. You can use it with any JavaScript framework, or even without one. In fact, you can go a _very_ long way using just weld.js with a single script.
 
 ## Installation
 
-weld.js is less than 200LOC so you can easily [copy + paste](/weld.js) it in your project. But it's also available via npm and CDN. **Designed** for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
+weld.js is less than 200LOC so you can easily [copy + paste](/weld.js) it in your project. But it's also available via npm and CDN. _Designed_ for [no build](https://world.hey.com/dhh/you-can-t-get-faster-than-no-build-7a44131c) client-side development, but also supports ES6 modules and bundlers.
 
 ### CDN
 
@@ -111,6 +113,9 @@ This is useful for passing data from the server to the client, or for configurin
 <!-- using an object literal -->
 <div wd-bind="greetComplex" wd-attr="{name:'pim'}"></div>
 
+<!-- using an array literal -->
+<div wd-bind="greetArray" wd-attr="['pim', 'john']"></div>
+
 <!-- using JSON -->
 <div wd-bind="greetComplex" wd-attr='{"name":"pim"}'></div>
 
@@ -118,6 +123,11 @@ This is useful for passing data from the server to the client, or for configurin
 <script>
     weld.bind('greetValue', (el, attr) => {
         const message = 'Hello ' + attr;
+        weld.el(el, message);
+    });
+
+    weld.bind('greetArray', (el, attr) => {
+        const message = 'Hello ' + attr.join(', ');
         weld.el(el, message);
     });
 
@@ -285,7 +295,9 @@ const all = weld.dom.find('div.classfind', container);
 
 ## Usage with JavaScript Frameworks
 
-Many JavaScript frameworks typically angle their value proposition toward single-page application (SPA) development. But many of them are actually extremely viable options for multi-page application (MPA) development as well. Think of these as server-side application with ~sprinklings~ of JavaScript enhancements.
+> See the [samples](/samples) directory for more examples.
+
+Many JavaScript frameworks typically angle their value proposition toward single-page application (SPA) development. But many of them are actually extremely viable options for multi-page application (MPA) development as well. Think of these as server-side application with ~sprinklings~ of JavaScript.
 
 When building a SPA you create a root element, `<div id="root"></div>`, pass it to our framework of choice and it takes over from there. Effectively eliminating the brittle CSS<->JS relationship. But in MPA development, there isn't a clean entry-point like this, since the markup is primarily generated server-side. Thus, you often turn to using existing (or creating new) classes to begin attaching our JavaScript logic.
 
