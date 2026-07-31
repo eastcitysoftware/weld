@@ -11,7 +11,7 @@
     <h1>weld.js</h1>
 
     <div wd-bind="greeter" wd-attr="{ greeting: 'Hello' }">
-        <div wd-target="output"></div>
+        <div wd-target="output">Hello world</div>
         <input wd-target="input" type="text">
     </div>
 
@@ -24,14 +24,10 @@
                     weld.el('strong', name)
                 ]);
 
-            setGreeting();
-
             weld.el(targets.input, {
                 oninput: e => setGreeting(e.target.value)
             });
         });
-
-        weld.apply()
     </script>
 </body>
 

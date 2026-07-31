@@ -10,7 +10,7 @@
 <body>
     <h1>weld.js</h1>
 
-    <div wd-bind="counter" wd-attr="weld"></div>
+    <div wd-bind="counter" wd-attr="{ name: 'weld' }"></div>
 
     <script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
     <script src="../weld.js" wd-apply></script>
@@ -34,8 +34,8 @@
             };
         }
 
-        weld.bind('counter', function (el, name) {
-            m.mount(el, { view: () => m(HelloWorld, { name: name }) });
+        weld.bind('counter', function (el, attr) {
+            m.mount(el, { view: () => m(HelloWorld, { name: attr.name }) });
         });
     </script>
 </body>

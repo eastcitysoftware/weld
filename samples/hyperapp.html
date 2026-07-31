@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weld.js Example</title>
+</head>
+
+<body>
+    <h1>weld.js</h1>
+
+    <div wd-bind="counter" wd-attr="{ name: 'weld' }"></div>
+
+    <script src="https://unpkg.com/mithril@2.2.14/mithril.min.js"></script>
+    <script src="../weld.js" wd-apply></script>
+    <script>
+
+        // A mithril component
+        function HelloWorld() {
+            let count = 0;
+
+            function OnClick() {
+                count++;
+            }
+
+            return {
+                view: function (vnode) {
+                    var msg = 'Hello ' + vnode.attrs.name;
+                    return m('div', [
+                        m('p', `${msg}. You clicked the button ${count} times.`),
+                        m('button', { onclick: OnClick }, 'Click me',),
+                    ]);
+                }
+            };
+        }
+
+        weld.bind('counter', function (el, attr) {
+            m.mount(el, { view: () => m(HelloWorld, { name: attr.name }) });
+        });
+    </script>
+</body>
+
+</html>

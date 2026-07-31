@@ -15,7 +15,9 @@
     <script src="../weld.js" wd-apply></script>
     <script>
         weld.bind('lazyLoad', function (el, src) {
-            weld.el(el, { src });
+            setTimeout(() => {
+                weld.el(el, { src });
+            }, 2500);
         });
     </script>
 </body>
