@@ -1,7 +1,7 @@
 {
     "name": "weld.js",
-    "version": "3.0.0-beta.0",
-    "description": "Declarative DOM Bindings for great good.",
+    "version": "3.0.0-rc.0",
+    "description": "Don't select it, weld it.",
     "main": "weld",
     "browser": "weld.js",
     "files": [
