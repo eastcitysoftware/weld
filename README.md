@@ -46,7 +46,7 @@ npm install weld.js --save
 
 ```html
 <div wd-bind="greeter" wd-attr="{ greeting: 'Hello' }">
-    <div wd-target="output"></div>
+    <div wd-target="output">Hello world</div>
     <input wd-target="input" placeholder="enter name">
 </div>
 
@@ -58,8 +58,6 @@ npm install weld.js --save
                 `${attr.greeting} `,
                 weld.el('strong', name)
             ]);
-
-        setGreeting();
 
         weld.el(targets.input, {
             oninput: e => setGreeting(e.target.value)
@@ -297,11 +295,13 @@ const all = weld.dom.find('div.classfind', container);
 
 > See the [samples](/samples) directory for more examples.
 
-Many JavaScript frameworks typically angle their value proposition toward single-page application (SPA) development. But many of them are actually extremely viable options for multi-page application (MPA) development as well. Think of these as server-side application with ~sprinklings~ of JavaScript.
+Many JavaScript libraries angle their value proposition at single-page application (SPA) development. And most are viable options for multi-page application (MPA) development as well.
 
-When building a SPA you create a root element, `<div id="root"></div>`, pass it to our framework of choice and it takes over from there. Effectively eliminating the brittle CSS<->JS relationship. But in MPA development, there isn't a clean entry-point like this, since the markup is primarily generated server-side. Thus, you often turn to using existing (or creating new) classes to begin attaching our JavaScript logic.
+When building a SPA you typically create a root element, `<div id="root"></div>`, pass it to the framework of choice and it takes over from there. Effectively eliminating the brittle CSS-to-JS relationship. But in MPA development there isn't a clean entry-point like this, since the markup is primarily generated server-side. Thus, you often turn to using existing (or creating new) classes to begin attaching JavaScript.
 
-Instead, using _weld_ you can declaratively inject our components removing any reliance on selectors for activation.
+Instead, using _weld_ you can declaratively attach functionality without the reliance on selectors for activation.
+
+### An example using Mithril.js
 
 [mithril.js](https://mithril.js.org/) is an amazing JavaScript project, so it will be used to demonstrate the concept in the example below.
 
